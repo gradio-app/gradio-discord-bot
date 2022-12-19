@@ -13,7 +13,7 @@ Below, we show examples how to use the Bot in your server to:
 - 🔢 Do math calculations
 - 🖼️ Generate images
 
-All for free and without having to code anything! Installation instructions are below, or you can try it out right now in the #gradio-bot-playground channel in [the Hugging Face Discord](https://discord.gg/Q7ZSBrZHjx).
+All for free and without having to code anything! Installation instructions are below, or you can try it out right now in the [#gradio-bot-playground channel](https://discord.gg/Q7ZSBrZHjx) in the Hugging Face Discord.
 
 ## Installing in your own Discord Server
 
