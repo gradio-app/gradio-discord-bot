@@ -105,7 +105,7 @@ Here's another example that shows that `@GradioBot` can handle media. Using [thi
 
 1. In a channel, type `@GradioBot abidlabs/images`
 
-2. Then, type in some text *in quotation marks* that you'd like to convert into an image, such as `@GradioBot "an astronaut riding a horse"`. You should see an image file returned by `@GradioBot`: 
+2. Then, type in some text *in quotation marks* that you'd like to convert into an image, such as `@GradioBot "a cartoon astronaut riding a horse"`. You should see an image file returned by `@GradioBot`: 
 
 <p align="center">
 <img width="437" alt="image" src="https://user-images.githubusercontent.com/1778297/208525226-c61c6263-5e68-448f-ae9d-25602732285f.png">
