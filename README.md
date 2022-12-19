@@ -44,20 +44,44 @@ Installing the Gradio Discord Bot is very simple:
 
 ## Usage
 
-Now that the Gradio Discord bot is installed, here's how to use it in any any channel in
-your Discord server:
+Now that the Gradio Discord bot is installed, here's how to use it in any any channel in your Discord server:
 
-1. If you would like to add 
-
-1. From any public channel, tag `@GradioBot` followed by the name of a Space you'd like to try,
-such as `abidlabs/en2fr` ([a Space](https://huggingface.co/spaces/abidlabs/en2fr) that translates from English to French) or `abidlabs/speak` ([a Space](https://huggingface.co/spaces/abidlabs/speak) that converts text to spoken speech). 
+1. From the channel, tag `@GradioBot` followed by the name of a Space you'd like to try,
+such as `abidlabs/en2fr` ([a Space](https://huggingface.co/spaces/abidlabs/en2fr) that translates from English to French) or `abidlabs/speak` ([a Space](https://huggingface.co/spaces/abidlabs/speak) that converts text to spoken speech), or any of the more than 5,000 Gradio demos on [Hugging Face Spaces](https://hf.space). 
 
 <p align="center">
 <img width="446" alt="image" src="https://user-images.githubusercontent.com/1778297/208513251-5ba2e8bc-82e6-4037-995b-dfbba0720126.png">
 </p>
 
-2. Once you press enter, you'll notice that the name of GradioBot will change 
+2. Once you press enter, you'll notice that the name of GradioBot will change to reflect the name of the Space that it has loaded:
 
+<p align="center">
+<img width="572" alt="image" src="https://user-images.githubusercontent.com/1778297/208517352-ca167539-c78a-4226-9cd1-c8fe6c1a2645.png">
+</p>
+
+3. Now type in the input you'd like to pass into the Space. In this example, we'll pass in an English phrase: "Hello, friends." The input **must be enclosed in double-quotes**. Otherwise, it will be interpreted as the name of a new Space that you are trying to load. Once you 
+
+<p align="center">
+<img width="438" alt="image" src="https://user-images.githubusercontent.com/1778297/208517591-f8024af3-fa2e-41e4-b043-994c4ce5693b.png">
+</p>
+
+4. If you'd like to load a new Space, just type in the name of a new Space (without any quotation marks) and `@GradioBot` will load the new Space instead. If you'd like to reset to the initial state of the `@GradioBot`, you can type in "@GradioBot exit".
+
+We'll show how to use `@GradioBot` with a few more complex Spaces below:
+
+## More examples
+
+### 🗣️ Convert text to speech (`abidlabs/speak`)
+
+The `@GradioBot` can handle media as well as text. For example, [this Space](https://huggingface.co/spaces/abidlabs/speak) converts text to speech recordings. Here's how to use it:
+
+1. In a channel, type `@GradioBot abidlabs/speak`
+
+2. Then, type in some text *in quotation marks* that you'd like to convert to speech, such as `@GradioBot "Look at this cool demo!"`. You should see an audio file returned by `@GradioBot`: 
+
+### 🔢 Do math calculations (`abidlabs/calc`)
+
+### 🖼️ Generate images (`abidlabs/images`)
 
 ## Contributing
 
