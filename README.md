@@ -53,7 +53,7 @@ such as `abidlabs/en2fr` ([a Space](https://huggingface.co/spaces/abidlabs/en2fr
 <img width="446" alt="image" src="https://user-images.githubusercontent.com/1778297/208513251-5ba2e8bc-82e6-4037-995b-dfbba0720126.png">
 </p>
 
-2. Once you press enter, you'll notice that the name of GradioBot will change to reflect the name of the Space that it has loaded:
+2. Once you press enter, you'll notice that the name of `@GradioBot` will change to reflect the name of the Space that it has loaded:
 
 <p align="center">
 <img width="572" alt="image" src="https://user-images.githubusercontent.com/1778297/208517352-ca167539-c78a-4226-9cd1-c8fe6c1a2645.png">
@@ -65,7 +65,7 @@ such as `abidlabs/en2fr` ([a Space](https://huggingface.co/spaces/abidlabs/en2fr
 <img width="438" alt="image" src="https://user-images.githubusercontent.com/1778297/208517591-f8024af3-fa2e-41e4-b043-994c4ce5693b.png">
 </p>
 
-4. If you'd like to load a new Space, just type in the name of a new Space (without any quotation marks) and `@GradioBot` will load the new Space instead. If you'd like to reset to the initial state of the `@GradioBot`, you can type in "@GradioBot exit".
+4. If you'd like to load a new Space, just type in the name of a new Space (without any quotation marks) and `@GradioBot` will load the new Space instead. If you'd like to reset to the initial state of the `@GradioBot`, you can type in "@GradioBot exit". 
 
 We'll show how to use `@GradioBot` with a few more complex Spaces below:
 
@@ -79,13 +79,24 @@ The `@GradioBot` can handle media as well as text. For example, [this Space](htt
 
 2. Then, type in some text *in quotation marks* that you'd like to convert to speech, such as `@GradioBot "Look at this cool demo!"`. You should see an audio file returned by `@GradioBot`: 
 
+<p align="center">
+<img width="519" alt="image" src="https://user-images.githubusercontent.com/1778297/208524742-f568ec4e-accb-4087-9acb-0bdad80fd7d2.png">
+</p>
+
+
+*Note*: generation can take a minute or even longer, depending on the length of the input and how many other people are using this Space
+
 ### 🔢 Do math calculations (`abidlabs/calc`)
 
-The `@GradioBot` can handle Spaces that take multiple inputs. For example, [this Space](https://huggingface.co/spaces/abidlabs/calc) takes in two numbers and a mathematical operation. Here's how to use it:
+The `@GradioBot` can handle Spaces that take multiple inputs. Each input **must be in quotes and separated by a space**. For example, [this Space](https://huggingface.co/spaces/abidlabs/calc) takes in two numbers and a mathematical operation. Here's how to use it:
 
 1. In a channel, type `@GradioBot abidlabs/calc`
 
-2. Then, type in `@GradioBot `, followed by a number in quotation marks, followed by a space, then a mathematical operation in quotation marks, followed by a space, followed by a number in quotation marks. Here's how it looks: 
+2. Then, type in `@GradioBot `, followed by the inputs, separated by Spaces. For example: `@GradioBot "4" "divide" "3"` Here's how it looks:
+
+<p align="center">
+<img width="430" alt="image" src="https://user-images.githubusercontent.com/1778297/208525038-21f8273c-53ce-46ec-9423-1694ac646da6.png">
+</p>
 
 
 ### 🖼️ Generate images (`abidlabs/images`)
@@ -96,7 +107,18 @@ Here's another example that shows that `@GradioBot` can handle media. Using [thi
 
 2. Then, type in some text *in quotation marks* that you'd like to convert into an image, such as `@GradioBot "an astronaut riding a horse"`. You should see an image file returned by `@GradioBot`: 
 
+<p align="center">
+<img width="437" alt="image" src="https://user-images.githubusercontent.com/1778297/208525226-c61c6263-5e68-448f-ae9d-25602732285f.png">
+</p>
+
+
+*Note*: generation can take a minute or even longer, depending on how many other people are using this Space
+
+## About
+
+This preliminary version of the Gradio Discord Bot was built by the [Gradio team](https://www.gradio.dev) at a hackathon in Paris. We hope you enjoy it and find it useful! 
 
 ## Contributing
 
 The Gradio Discord Bot is completely open-source. Feel free to open issues or pull requests in this repo to make it better!
+
