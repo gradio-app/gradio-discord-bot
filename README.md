@@ -116,7 +116,7 @@ Here's another example that shows that `@GradioBot` can handle media. Using [thi
 
 ## About
 
-This preliminary version of the Gradio Discord Bot was built by the [Gradio team](https://www.gradio.dev) at a hackathon in Paris. We hope you enjoy it and find it useful! 
+The first version of the Gradio Discord Bot was built by the [Gradio team](https://www.gradio.dev) at a hackathon in Paris in Nov. 2022. We hope you enjoy it and find it useful! 
 
 ## Contributing
 
