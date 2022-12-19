@@ -36,7 +36,7 @@ Installing the Gradio Discord Bot is very simple:
 That's it! You can confirm that the Gradio Discord Bot has been successfully installed in your server by going to the server and seeing if there is an account with the name `@Gradio Bot`:
 
 <p align="center">
-<img width="406" alt="image" src="https://user-images.githubusercontent.com/1778297/208508852-26e82415-d7df-429d-b2ef-0c4bd349687b.png">
+<img width="517" alt="image" src="https://user-images.githubusercontent.com/1778297/208510477-7a634158-885f-4083-981a-483d19ae7416.png">
 </p>
 
 
