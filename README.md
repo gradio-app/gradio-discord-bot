@@ -42,7 +42,10 @@ That's it! You can confirm that the Gradio Discord Bot has been successfully ins
 
 ## Usage
 
+Now that the Gradio Discord bot is installed, here's how to use it in any channel in
+your Discord server:
 
+1. From any channe
 
 ## Contributing
 

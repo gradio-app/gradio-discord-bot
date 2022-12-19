@@ -44,7 +44,7 @@ async def on_message(message: discord.Message):
             print(content)
             if content == "exit":
                 bot.guild_spaces.pop(guild.id, None)
-                await guild.me.edit(nick="Gradio Bot")
+                await guild.me.edit(nick="GradioBot")
             elif content.startswith("\"") or content.startswith("\'"):
                 if guild.id in bot.guild_spaces:
                     params = re.split(r' (?=")', content)
@@ -60,7 +60,7 @@ async def on_message(message: discord.Message):
                     return
                 else:
                     await message.channel.send("No Space is currently running. Please type in the name of a Hugging Face Space name first, e.g. abidlabs/en2fr")
-                    await guild.me.edit(nick="Gradio Bot")                    
+                    await guild.me.edit(nick="GradioBot")                    
             else:
                 iframe_url = (
                     requests.get(f"https://huggingface.co/api/spaces/{content}/host")
@@ -73,11 +73,11 @@ async def on_message(message: discord.Message):
                     await message.channel.send(f"Loading Space: https://huggingface.co/spaces/{content}...")
                 interface = gr.Interface.load(content, src="spaces")
                 bot.guild_spaces[guild.id] = interface
-                if len(content) > 32 - len("Gradio Bot []"):
-                    nickname = content[:32 - len("Gradio Bot []") - 3] + "..."
+                if len(content) > 32 - len("GradioBot []"):
+                    nickname = content[:32 - len("GradioBot []") - 3] + "..."
                 else:
                     nickname = content
-                nickname = f"Gradio Bot [{nickname}]"
+                nickname = f"GradioBot [{nickname}]"
                 await guild.me.edit(nick=nickname)
                 await message.channel.send("Ready to make predictions! Type in your inputs and enclose them in quotation marks.")
                     
