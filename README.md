@@ -45,7 +45,10 @@ That's it! You can confirm that the Gradio Discord Bot has been successfully ins
 Now that the Gradio Discord bot is installed, here's how to use it in any channel in
 your Discord server:
 
-1. From any channe
+1. From any channel, tag `@GradioBot` followed by the name of a Space you'd like to try,
+such as `abidlabs/en2fr` ([a Space](https://huggingface.co/spaces/abidlabs/en2fr) that translates from English to French) or `abidlabs/speak` ([a Space](https://huggingface.co/spaces/abidlabs/speak) that converts text to spoken speech). 
+
+
 
 ## Contributing
 
