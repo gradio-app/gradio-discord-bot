@@ -81,7 +81,21 @@ The `@GradioBot` can handle media as well as text. For example, [this Space](htt
 
 ### 🔢 Do math calculations (`abidlabs/calc`)
 
+The `@GradioBot` can handle Spaces that take multiple inputs. For example, [this Space](https://huggingface.co/spaces/abidlabs/calc) takes in two numbers and a mathematical operation. Here's how to use it:
+
+1. In a channel, type `@GradioBot abidlabs/calc`
+
+2. Then, type in `@GradioBot `, followed by a number in quotation marks, followed by a space, then a mathematical operation in quotation marks, followed by a space, followed by a number in quotation marks. Here's how it looks: 
+
+
 ### 🖼️ Generate images (`abidlabs/images`)
+
+Here's another example that shows that `@GradioBot` can handle media. Using [this Space](https://huggingface.co/spaces/abidlabs/speak) converts text to images. Here's how to use it:
+
+1. In a channel, type `@GradioBot abidlabs/images`
+
+2. Then, type in some text *in quotation marks* that you'd like to convert into an image, such as `@GradioBot "an astronaut riding a horse"`. You should see an image file returned by `@GradioBot`: 
+
 
 ## Contributing
 
