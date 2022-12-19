@@ -65,7 +65,7 @@ such as `abidlabs/en2fr` ([a Space](https://huggingface.co/spaces/abidlabs/en2fr
 <img width="438" alt="image" src="https://user-images.githubusercontent.com/1778297/208517591-f8024af3-fa2e-41e4-b043-994c4ce5693b.png">
 </p>
 
-4. If you'd like to load a new Space, just type in the name of a new Space (without any quotation marks) and `@GradioBot` will load the new Space instead. If you'd like to reset to the initial state of the `@GradioBot`, you can type in "@GradioBot exit". 
+4. If you'd like to load a new Space, just type in the name of a new Space (without any quotation marks) and `@GradioBot` will load the new Space instead. If you'd like to reset to the initial state of the `@GradioBot`, you can type in `@GradioBot exit`. 
 
 We'll show how to use `@GradioBot` with a few more complex Spaces below:
 
