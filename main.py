@@ -1,11 +1,12 @@
 import json
 import pathlib
 import re
-from typing import Dict
+from typing import Dict, TYPE_CHECKING
 
 import discord
 from discord.ext import commands
 import gradio as gr
+from gradio import utils
 import requests
 
 
@@ -15,15 +16,16 @@ with open("secrets.json") as fp:
 intents = discord.Intents(messages=True, guilds=True)
 
 bot = commands.Bot("", intents=intents)
-bot.guild_spaces: Dict[int, str] = {}
+bot.guild_spaces: Dict[int, gr.Blocks] = {}
 
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user}')
+    print(f'Running in {len(bot.guilds)} servers...')
  
 
-async def send_file_or_text(channel, file_or_text):
+async def send_file_or_text(channel, file_or_text: str):
     # if the file exists, send as a file
     if pathlib.Path(str(file_or_text)).exists():
         with open(file_or_text, "rb") as f:
@@ -31,6 +33,27 @@ async def send_file_or_text(channel, file_or_text):
     else:
         return await channel.send(file_or_text)
         
+
+async def run_prediction(space: gr.Blocks, *inputs):
+    inputs = list(inputs)
+    fn_index = 0
+    processed_inputs = space.serialize_data(fn_index=fn_index, inputs=inputs)
+    batch = space.dependencies[fn_index]["batch"]
+    
+    if batch:
+        processed_inputs = [[inp] for inp in processed_inputs]
+
+    outputs = await space.process_api(fn_index=fn_index, inputs=processed_inputs, request=None)
+    outputs = outputs["data"]
+
+    if batch:
+        outputs = [out[0] for out in outputs]
+
+    processed_outputs = space.deserialize_data(fn_index, outputs)
+    processed_outputs = utils.resolve_singleton(processed_outputs)
+    
+    return processed_outputs    
+ 
  
 @bot.event
 async def on_message(message: discord.Message):
@@ -41,7 +64,6 @@ async def on_message(message: discord.Message):
             content = message.content.replace("<@1040198143695933501>", "").strip()
             guild = message.channel.guild
             
-            print(content)
             if content == "exit":
                 bot.guild_spaces.pop(guild.id, None)
                 await guild.me.edit(nick="GradioBot")
@@ -49,9 +71,8 @@ async def on_message(message: discord.Message):
                 if guild.id in bot.guild_spaces:
                     params = re.split(r' (?=")', content)
                     params = [p.strip("\'\"") for p in params]
-                    print(params)
-                    interface = bot.guild_spaces[guild.id]
-                    predictions = interface(*params)
+                    space = bot.guild_spaces[guild.id]
+                    predictions = await run_prediction(space, *params)
                     if isinstance(predictions, (tuple, list)):
                         for p in predictions:
                             await send_file_or_text(message.channel, p)
