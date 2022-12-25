@@ -11,7 +11,7 @@ Access to Data is only permitted to Bot's developers, and only in the scope requ
 Storage of Data
 -----------------------------------------------------------------------------------------------------------------
 
-Data may be stored in a database. The database will be secured to prevent external access, however no guarantee is provided and the Bot owners assume no liability for the unintentional or malicious breach of Data. In the event of an unauthorised Data access, users will be notified through the Discord client application.
+Data may be stored in a database. The database will be secured to prevent external access, however no guarantee is provided and the Bot owners assume no liability for the unintentional or malicious breach of Data. In the event of an unauthorised Data access, users will be notified through the Discord client application. Users can email team@gradio.app to request deletion of their data.
 
 
 Underage Users
