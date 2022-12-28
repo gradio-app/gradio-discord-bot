@@ -79,7 +79,7 @@ async def load_space(guild: discord.Guild, message: discord.Message, content: st
         )
     interface = gr.Interface.load(content, src="spaces")
     guild_spaces[guild.id] = interface  # type: ignore
-    asyncio.create_task(update_guild_spaces_file(guild_spaces))
+    asyncio.create_task(update_guild_spaces_file(guild_spaces, GUILD_SPACES_FILE))
     if len(content) > 32 - len(f"{bot.name} []"):  # type: ignore
         nickname = content[: 32 - len(f"{bot.name} []") - 3] + "..."  # type: ignore
     else:
@@ -93,7 +93,7 @@ async def load_space(guild: discord.Guild, message: discord.Message, content: st
 
 async def disconnect_space(bot: commands.Bot, guild: discord.Guild):
     guild_spaces.pop(guild.id, None)
-    asyncio.create_task(update_guild_spaces_file(guild_spaces))
+    asyncio.create_task(update_guild_spaces_file(guild_spaces, GUILD_SPACES_FILE))
     await guild.me.edit(nick=bot.name)  # type: ignore
 
 
@@ -122,9 +122,7 @@ async def on_message(message: discord.Message):
         return
     else:
         if message.content:
-            content = message.content.replace("<@1040198143695933501>", "").strip()
-            content = message.content.replace("<@1057338428938788884>", "").strip()
-
+            content = remove_tags(message.content)
             guild = message.channel.guild
             assert guild, "Message not sent in a guild."
 
