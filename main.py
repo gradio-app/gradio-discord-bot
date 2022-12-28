@@ -43,7 +43,7 @@ async def run_prediction(space: gr.Blocks, *inputs):
     if batch:
         processed_inputs = [[inp] for inp in processed_inputs]
 
-    outputs = await space.process_api(fn_index=fn_index, inputs=processed_inputs, request=None)
+    outputs = await space.process_api(fn_index=fn_index, inputs=processed_inputs, request=None, state={})
     outputs = outputs["data"]
 
     if batch:
