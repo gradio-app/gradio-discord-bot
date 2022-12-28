@@ -1,17 +1,19 @@
+from __future__ import annotations
+
 import asyncio
 import json
+import hashlib
 import pathlib
-from typing import Dict
+from typing import Dict, List
 
 import discord
 
 lock = asyncio.Lock()
 
-
-async def update_guild_spaces_file(guild_spaces: Dict, file_path: str):
+async def update_json_file(data: Dict | List, file_path: str):
     async with lock:
         with open(file_path, "w") as fp:
-            json.dump(guild_spaces, fp)
+            json.dump(data, fp)
 
 
 async def send_file_or_text(channel, file_or_text: str):
@@ -27,4 +29,7 @@ def remove_tags(content: str) -> str:
     content = content.replace("<@1040198143695933501>", "")
     content = content.replace("<@1057338428938788884>", "")
     return content.strip()
-    
+
+
+def hash_user_id(user_id: int) -> str:
+    return hashlib.sha256(str(user_id).encode("utf-8")).hexdigest()
