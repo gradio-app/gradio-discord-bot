@@ -22,27 +22,25 @@ lock = asyncio.Lock()
 bot = commands.Bot("", intents=discord.Intents(messages=True, guilds=True))
 
 
-GUILD_SPACES_FILE = "guild_spaces.json"
+GUILD_SPACES_FILE = "guild_spaces.pkl"
+
 
 if pathlib.Path(GUILD_SPACES_FILE).exists():
-    with open(GUILD_SPACES_FILE) as fp:
-        guild_spaces = json.load(fp)
-        assert isinstance(guild_spaces, dict), f"{GUILD_SPACES_FILE} in invalid format."
-        
-        guild_blocks = {}
-        for k, v in guild_spaces.items():
-            guild_blocks[k] = gr.Interface.load(v, src="spaces")
+    guild_spaces = read_pickle_file(GUILD_SPACES_FILE)
+    assert isinstance(guild_spaces, dict), f"{GUILD_SPACES_FILE} in invalid format."        
+    guild_blocks = {}
+    for k, v in guild_spaces.items():
+        guild_blocks[k] = gr.Interface.load(v, src="spaces")
 else:
     guild_spaces: Dict[int, str] = {}
     guild_blocks: Dict[int, gr.Blocks] = {}
 
 
-HASHED_USERS_FILE = "users.json"
+HASHED_USERS_FILE = "users.pkl"
 
 if pathlib.Path(HASHED_USERS_FILE).exists():
-    with open(HASHED_USERS_FILE) as fp:
-        hashed_users = json.load(fp)
-        assert isinstance(hashed_users, list), f"{HASHED_USERS_FILE} in invalid format."
+    hashed_users = read_pickle_file(HASHED_USERS_FILE)
+    assert isinstance(hashed_users, list), f"{HASHED_USERS_FILE} in invalid format."
 else:
     hashed_users: List[str] = []
 
@@ -105,7 +103,7 @@ async def load_space(guild: discord.Guild, message: discord.Message, content: st
     interface = gr.Interface.load(content, src="spaces")
     guild_spaces[guild.id] = content
     guild_blocks[guild.id] = interface
-    asyncio.create_task(update_json_file(guild_spaces, GUILD_SPACES_FILE))
+    asyncio.create_task(update_pickle_file(guild_spaces, GUILD_SPACES_FILE))
     if len(content) > 32 - len(f"{bot.name} []"):  # type: ignore
         nickname = content[: 32 - len(f"{bot.name} []") - 3] + "..."  # type: ignore
     else:
@@ -120,7 +118,7 @@ async def load_space(guild: discord.Guild, message: discord.Message, content: st
 async def disconnect_space(bot: commands.Bot, guild: discord.Guild):
     guild_spaces.pop(guild.id, None)
     guild_blocks.pop(guild.id, None)
-    asyncio.create_task(update_json_file(guild_spaces, GUILD_SPACES_FILE))
+    asyncio.create_task(update_pickle_file(guild_spaces, GUILD_SPACES_FILE))
     await guild.me.edit(nick=bot.name)  # type: ignore
 
 
@@ -150,7 +148,7 @@ async def on_message(message: discord.Message):
     h = hash_user_id(message.author.id)
     if h not in hashed_users:
         hashed_users.append(h)
-        asyncio.create_task(update_json_file(hashed_users, HASHED_USERS_FILE))
+        asyncio.create_task(update_pickle_file(hashed_users, HASHED_USERS_FILE))
     else:
         if message.content:
             content = remove_tags(message.content)

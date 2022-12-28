@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-import json
+import pickle
 import hashlib
 import pathlib
 from typing import Dict, List
@@ -10,10 +10,16 @@ import discord
 
 lock = asyncio.Lock()
 
-async def update_json_file(data: Dict | List, file_path: str):
+
+async def update_pickle_file(data: Dict | List, file_path: str):
     async with lock:
-        with open(file_path, "w") as fp:
-            json.dump(data, fp)
+        with open(file_path, "wb") as fp:
+            pickle.dump(data, fp)
+
+
+def read_pickle_file(file_path: str):
+    with open(file_path, "rb") as fp:
+        return pickle.load(fp)
 
 
 async def send_file_or_text(channel, file_or_text: str):
