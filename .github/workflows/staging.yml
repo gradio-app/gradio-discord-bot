@@ -2,6 +2,9 @@ name: Run Python script
 
 on:
   workflow_dispatch:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
 
 jobs:
   build:
@@ -18,3 +21,8 @@ jobs:
       - name: Run Python script
         run: |
           nohup python main.py --token=${{ secrets.staging_token }} &
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Test this PR here (will be active until a new PR is opened): https://discord.com/channels/879548962464493619/1057682935832129626
