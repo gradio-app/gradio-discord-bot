@@ -27,7 +27,7 @@ GUILD_SPACES_FILE = "guild_spaces.pkl"
 
 if pathlib.Path(GUILD_SPACES_FILE).exists():
     guild_spaces = read_pickle_file(GUILD_SPACES_FILE)
-    assert isinstance(guild_spaces, dict), f"{GUILD_SPACES_FILE} in invalid format."        
+    assert isinstance(guild_spaces, dict), f"{GUILD_SPACES_FILE} in invalid format."
     guild_blocks = {}
     for k, v in guild_spaces.items():
         guild_blocks[k] = gr.Interface.load(v, src="spaces")
@@ -79,11 +79,10 @@ async def display_stats(message: discord.Message):
     await message.channel.send(f"Total # of users: {len(hashed_users)}")
     await message.channel.send(f"Most popular spaces:")
     # print the top 10 most frequently occurring strings and their counts
-    spaces = guild_spaces.values()    
+    spaces = guild_spaces.values()
     counts = Counter(spaces)
     for space, count in counts.most_common(10):
         await message.channel.send(f"- {space}: {count}")
-    
 
 
 async def load_space(guild: discord.Guild, message: discord.Message, content: str):
