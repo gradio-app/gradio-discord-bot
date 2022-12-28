@@ -1,15 +1,16 @@
-name: Run Python script
+name: Launch Staging Bot
 
 on:
   workflow_dispatch:
   pull_request_target:
     types: [opened, synchronize, reopened]
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1    
       - uses: actions/checkout@v2
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -18,11 +19,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -r requirements.txt
-      - name: Run Python script
+      - name: Launch Discord server script
         run: |
-          nohup python main.py --token=${{ secrets.staging_token }} &
+          nohup python main.py --token=${{ secrets.staging_token }} < /dev/null & > /dev/null &
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            Test this PR here (will be active until a new PR is opened): https://discord.com/channels/879548962464493619/1057682935832129626
+            Test this PR here (will be active for 1 hour): https://discord.com/channels/879548962464493619/1057682935832129626
+      - name: Keepalive
+        run: |
+          python -c "import time; time.sleep(60*60)"

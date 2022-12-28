@@ -1,5 +1,6 @@
 import asyncio
 import argparse
+from collections import Counter
 import json
 import pathlib
 import re
@@ -11,6 +12,7 @@ import gradio as gr
 from gradio import utils
 import requests
 
+from typing import Dict, List
 
 from utils import *
 
@@ -20,14 +22,27 @@ lock = asyncio.Lock()
 bot = commands.Bot("", intents=discord.Intents(messages=True, guilds=True))
 
 
-GUILD_SPACES_FILE = "guild_spaces.json"
+GUILD_SPACES_FILE = "guild_spaces.pkl"
+
 
 if pathlib.Path(GUILD_SPACES_FILE).exists():
-    with open(GUILD_SPACES_FILE) as fp:
-        guild_spaces = json.load(fp)
-        assert isinstance(guild_spaces, dict), "guild_spaces.json in invalid format."
+    guild_spaces = read_pickle_file(GUILD_SPACES_FILE)
+    assert isinstance(guild_spaces, dict), f"{GUILD_SPACES_FILE} in invalid format."        
+    guild_blocks = {}
+    for k, v in guild_spaces.items():
+        guild_blocks[k] = gr.Interface.load(v, src="spaces")
 else:
-    guild_spaces = {}
+    guild_spaces: Dict[int, str] = {}
+    guild_blocks: Dict[int, gr.Blocks] = {}
+
+
+HASHED_USERS_FILE = "users.pkl"
+
+if pathlib.Path(HASHED_USERS_FILE).exists():
+    hashed_users = read_pickle_file(HASHED_USERS_FILE)
+    assert isinstance(hashed_users, list), f"{HASHED_USERS_FILE} in invalid format."
+else:
+    hashed_users: List[str] = []
 
 
 @bot.event
@@ -60,7 +75,15 @@ async def run_prediction(space: gr.Blocks, *inputs):
 
 
 async def display_stats(message: discord.Message):
-    await message.channel.send(f"Running in {len(bot.guilds)} servers...")
+    await message.channel.send(f"Running in {len(bot.guilds)} servers")
+    await message.channel.send(f"Total # of users: {len(hashed_users)}")
+    await message.channel.send(f"Most popular spaces:")
+    # print the top 10 most frequently occurring strings and their counts
+    spaces = guild_spaces.values()    
+    counts = Counter(spaces)
+    for space, count in counts.most_common(10):
+        await message.channel.send(f"- {space}: {count}")
+    
 
 
 async def load_space(guild: discord.Guild, message: discord.Message, content: str):
@@ -78,8 +101,9 @@ async def load_space(guild: discord.Guild, message: discord.Message, content: st
             f"Loading Space: https://huggingface.co/spaces/{content}..."
         )
     interface = gr.Interface.load(content, src="spaces")
-    guild_spaces[guild.id] = interface  # type: ignore
-    asyncio.create_task(update_guild_spaces_file(guild_spaces, GUILD_SPACES_FILE))
+    guild_spaces[guild.id] = content
+    guild_blocks[guild.id] = interface
+    asyncio.create_task(update_pickle_file(guild_spaces, GUILD_SPACES_FILE))
     if len(content) > 32 - len(f"{bot.name} []"):  # type: ignore
         nickname = content[: 32 - len(f"{bot.name} []") - 3] + "..."  # type: ignore
     else:
@@ -93,7 +117,8 @@ async def load_space(guild: discord.Guild, message: discord.Message, content: st
 
 async def disconnect_space(bot: commands.Bot, guild: discord.Guild):
     guild_spaces.pop(guild.id, None)
-    asyncio.create_task(update_guild_spaces_file(guild_spaces, GUILD_SPACES_FILE))
+    guild_blocks.pop(guild.id, None)
+    asyncio.create_task(update_pickle_file(guild_spaces, GUILD_SPACES_FILE))
     await guild.me.edit(nick=bot.name)  # type: ignore
 
 
@@ -101,7 +126,7 @@ async def make_prediction(guild: discord.Guild, message: discord.Message, conten
     if guild.id in guild_spaces:
         params = re.split(r' (?=")', content)
         params = [p.strip("'\"") for p in params]
-        space = guild_spaces[guild.id]
+        space = guild_blocks[guild.id]
         predictions = await run_prediction(space, *params)
         if isinstance(predictions, (tuple, list)):
             for p in predictions:
@@ -120,6 +145,10 @@ async def make_prediction(guild: discord.Guild, message: discord.Message, conten
 async def on_message(message: discord.Message):
     if message.author == bot.user:
         return
+    h = hash_user_id(message.author.id)
+    if h not in hashed_users:
+        hashed_users.append(h)
+        asyncio.create_task(update_pickle_file(hashed_users, HASHED_USERS_FILE))
     else:
         if message.content:
             content = remove_tags(message.content)
