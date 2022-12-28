@@ -19,7 +19,7 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Run Python script
         run: |
-          nohup python main.py --token=${{ secrets.staging_token }} &
+          nohup python main.py --token=${{ secrets.staging_token }} < /dev/null & > /dev/null &
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
