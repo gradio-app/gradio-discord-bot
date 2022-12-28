@@ -15,7 +15,6 @@ intents = discord.Intents(messages=True, guilds=True)
 
 bot = commands.Bot("", intents=intents)
 bot.guild_spaces = {}  # type: ignore
-guild_spaces: Dict[int, gr.Blocks] = bot.guild_spaces  # type: ignore
 
 
 @bot.event
@@ -63,17 +62,19 @@ async def on_message(message: discord.Message):
     else:
         if message.content:
             content = message.content.replace("<@1040198143695933501>", "").strip()
+            content = message.content.replace("<@1057338428938788884>", "").strip()
+            
             guild = message.channel.guild
             assert guild, "Message not sent in a guild."
 
             if content == "exit":
-                guild_spaces.pop(guild.id, None)
-                await guild.me.edit(nick="GradioBot")
+                bot.guild_spaces.pop(guild.id, None)  # type: ignore
+                await guild.me.edit(nick=bot.name)  # type: ignore
             elif content.startswith('"') or content.startswith("'"):
-                if guild.id in guild_spaces:
+                if guild.id in bot.guild_spaces:  # type: ignore
                     params = re.split(r' (?=")', content)
                     params = [p.strip("'\"") for p in params]
-                    space = guild_spaces[guild.id]
+                    space = bot.guild_spaces[guild.id]  # type: ignore
                     predictions = await run_prediction(space, *params)
                     if isinstance(predictions, (tuple, list)):
                         for p in predictions:
@@ -85,7 +86,7 @@ async def on_message(message: discord.Message):
                     await message.channel.send(
                         "No Space is currently running. Please type in the name of a Hugging Face Space name first, e.g. abidlabs/en2fr"
                     )
-                    await guild.me.edit(nick="GradioBot")
+                    await guild.me.edit(nick=bot.name)  # type: ignore
             else:
                 iframe_url = (
                     requests.get(f"https://huggingface.co/api/spaces/{content}/host")
@@ -101,12 +102,12 @@ async def on_message(message: discord.Message):
                         f"Loading Space: https://huggingface.co/spaces/{content}..."
                     )
                 interface = gr.Interface.load(content, src="spaces")
-                guild_spaces[guild.id] = interface
-                if len(content) > 32 - len("GradioBot []"):
-                    nickname = content[: 32 - len("GradioBot []") - 3] + "..."
+                bot.guild_spaces[guild.id] = interface  # type: ignore
+                if len(content) > 32 - len(f"{bot.name} []"):  # type: ignore
+                    nickname = content[: 32 - len(f"{bot.name} []") - 3] + "..."  # type: ignore
                 else:
                     nickname = content
-                nickname = f"GradioBot [{nickname}]"
+                nickname = f"{bot.name} [{nickname}]"  # type: ignore
                 await guild.me.edit(nick=nickname)
                 await message.channel.send(
                     "Ready to make predictions! Type in your inputs and enclose them in quotation marks."
@@ -116,17 +117,22 @@ async def on_message(message: discord.Message):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "token",
+        "--token",
         type=str,
         help="API key for the Discord bot. You can set this to your Discord token if you'd like to make your own clone of the Gradio Bot.",
+        required=False,
         default="",
     )
     args = parser.parse_args()
 
     if args.token.strip():
         discord_token = args.token
+        bot.env = "staging"  # type: ignore
+        bot.name = "StagingBot"  # type: ignore
     else:
         with open("secrets.json") as fp:
             discord_token = json.load(fp)["discord_token"]
+        bot.env = "prod"  # type: ignore
+        bot.name = "GradioBot"  # type: ignore
 
     bot.run(discord_token)
