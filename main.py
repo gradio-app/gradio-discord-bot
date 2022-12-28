@@ -75,8 +75,11 @@ async def run_prediction(space: gr.Blocks, *inputs):
 
 
 async def display_stats(message: discord.Message):
-    await message.channel.send(f"Running in {len(bot.guilds)} servers")
-    await message.channel.send(f"Total # of users: {len(hashed_users)}")
+    await message.channel.send(
+        f"Running in {len(bot.guilds)} servers\n"
+        f"Total # of users: {len(hashed_users)}\n"
+        f"------------------"
+    )
     await message.channel.send(f"Most popular spaces:")
     # print the top 10 most frequently occurring strings and their counts
     spaces = guild_spaces.values()
