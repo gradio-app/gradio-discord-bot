@@ -17,4 +17,4 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Run Python script
         run: |
-          nohup python main.py --api-key=${{ secrets.API_KEY }} &
+          nohup python main.py --token=${{ secrets.staging_token }} &
