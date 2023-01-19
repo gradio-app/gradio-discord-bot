@@ -30,7 +30,10 @@ if pathlib.Path(GUILD_SPACES_FILE).exists():
     assert isinstance(guild_spaces, dict), f"{GUILD_SPACES_FILE} in invalid format."
     guild_blocks = {}
     for k, v in guild_spaces.items():
-        guild_blocks[k] = gr.Interface.load(v, src="spaces")
+        try:
+            guild_blocks[k] = gr.Interface.load(v, src="spaces")
+        except ValueError:
+            del guild_spaces[k]
 else:
     guild_spaces: Dict[int, str] = {}
     guild_blocks: Dict[int, gr.Blocks] = {}
