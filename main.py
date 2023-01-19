@@ -29,11 +29,14 @@ if pathlib.Path(GUILD_SPACES_FILE).exists():
     guild_spaces = read_pickle_file(GUILD_SPACES_FILE)
     assert isinstance(guild_spaces, dict), f"{GUILD_SPACES_FILE} in invalid format."
     guild_blocks = {}
+    delete_keys = []
     for k, v in guild_spaces.items():
         try:
             guild_blocks[k] = gr.Interface.load(v, src="spaces")
         except ValueError:
-            del guild_spaces[k]
+            delete_keys.append(k)
+    for k in delete_keys:
+        del guild_spaces[k]
 else:
     guild_spaces: Dict[int, str] = {}
     guild_blocks: Dict[int, gr.Blocks] = {}
